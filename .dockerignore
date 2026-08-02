@@ -1,0 +1,16 @@
+.git
+.gitignore
+.venv
+venv
+.env.local
+.env.cloud
+.env
+env
+/__pycache__
+.pyc
+.pyo
+.pyd
+.vscode
+.idea
+
+dbt_project/profiles.yml

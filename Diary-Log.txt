@@ -1,0 +1,2 @@
+Day 15-31: Studied, planned, got to know tools, understand problems and defined what it was that I wanted to do.
+Day 2: Set up docker-compose.yml.
