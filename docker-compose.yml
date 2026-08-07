@@ -1,4 +1,17 @@
+version: "3.8"
+
 services:
+  postgres-vector:
+    image: postgres:15
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${ENV_USER}
+      POSTGRES_PASSWORD: ${ENV_PASSWORD}
+      POSTGRES_DB: ${ENV_DATABASE}
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
   app:
     build:
       context: .
