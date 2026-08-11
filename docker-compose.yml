@@ -2,21 +2,23 @@ name: "project-epiclock"
 
 services:
   postgres_vector:
-    image: pgvector/pgvector:pg18
-    restart: unless-stopped
+    image: pgvector/pgvector:pg17
     ports:
       - "5432:5432"
     environment:
       POSTGRES_USER: ${ENV_USER}
       POSTGRES_PASSWORD: ${ENV_PASSWORD}
       POSTGRES_DB: ${ENV_DATABASE}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
   
   synthea_generator:
     image: openjdk:17-slim
     volumes:
       - ./data:/output
     command: >
-      sh -c "git clone https://github.com/synthetichealth/synthea.git &&
+      sh -c "apt-get update && apt-get install -y git &&
+            git clone https://github.com/synthetichealth/synthea.git &&
             cd synthea && ./gradlew build &&
             ./run_synthea -p 100 --exporter.baseDirectory=/output"
 
@@ -28,6 +30,9 @@ services:
       - postgres_vector
     environment:
       - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - ENV_USER=${ENV_USER}
+      - ENV_PASSWORD=${ENV_PASSWORD}
+      - ENV_DATABASE=${ENV_DATABASE}
 
 volumes:
-  postgres_vector:
+  postgres_data:
