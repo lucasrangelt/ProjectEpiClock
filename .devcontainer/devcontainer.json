@@ -1,13 +1,15 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/python
 {
-	"name": "Scrapy Python3 PostgreSQL",
+	"name": "Project Epiclock Devcontainer",
 	"dockerComposeFile": "../docker-compose.yml",
-	"service": "app",
-	"workspaceFolder": "/workspaces/app",
+
+	// Specify which service VS Code should connect its terminal to
+	"service": "epiclock_app",
+	"workspaceFolder": "/app",
 	"customizations": {
-    "vscode": {
-		"extensions": ["ms-python.python"]
+		"vscode": {
+			"extensions": ["ms-python.python", "ms-python.vscode-pylance"]
 		}
 	},
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile

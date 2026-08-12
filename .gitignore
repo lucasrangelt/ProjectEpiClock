@@ -11,5 +11,6 @@ env
 .pyd
 .vscode
 .idea
+.notes
 
 dbt_project/profiles.yml
