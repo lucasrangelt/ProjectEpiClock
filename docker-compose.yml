@@ -13,14 +13,12 @@ services:
       - postgres_data:/var/lib/postgresql/data
   
   synthea_generator:
-    image: openjdk:17-slim
+    build:
+      context: .
+      dockerfile: Dockerfile.synthea
     volumes:
       - ./data:/output
-    command: >
-      sh -c "apt-get update && apt-get install -y git &&
-            git clone https://github.com/synthetichealth/synthea.git &&
-            cd synthea && ./gradlew build &&
-            ./run_synthea -p 100 --exporter.baseDirectory=/output"
+    command: -p 100 --exporter.csv.export=true --exporter.baseDirectory=/output
 
   epiclock_app:
     build:

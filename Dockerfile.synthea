@@ -1,0 +1,6 @@
+FROM openjdk:17-slim
+RUN apt-get update && apt-get install -y git
+RUN git clone https://github.com/synthetichealth/synthea.git /synthea
+WORKDIR /synthea
+RUN ./gradlew build
+ENTRYPOINT ["./run_synthea"]
