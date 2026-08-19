@@ -13,6 +13,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
   
   synthea_generator:
+    profiles: ["tools"]
     build:
       context: .
       dockerfile: Dockerfile.synthea
@@ -31,6 +32,9 @@ services:
       - ENV_USER=${ENV_USER}
       - ENV_PASSWORD=${ENV_PASSWORD}
       - ENV_DATABASE=${ENV_DATABASE}
+    volumes:
+      - .:/app
+    command: sleep infinity
 
 volumes:
   postgres_data:
