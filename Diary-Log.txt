@@ -3,3 +3,4 @@ Day 2: Set up docker-compose.yml.
 
 Day 16: Struggled with Synthea, trying to make it not run every time I rebuild on Docker.
 Day 17: Successfully solved multiple issues regarding Synthea and Docker folder/app mapping. Now, we can work.
+Day 18: Nevermind...
