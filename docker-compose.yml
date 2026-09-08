@@ -4,7 +4,7 @@ services:
   postgres_vector:
     image: pgvector/pgvector:pg17
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       POSTGRES_USER: ${ENV_USER}
       POSTGRES_PASSWORD: ${ENV_PASSWORD}
