@@ -1,3 +1,9 @@
 duckdb
 pandas
+numpy
+pyarrow
+psycopg2-binary
+pgvector
+langgraph
+langchain-google-genai
 python-dotenv

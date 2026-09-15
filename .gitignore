@@ -13,6 +13,7 @@ env
 .idea
 .notes
 .todo
+/src/*.parquet
 /data
 
 dbt_project/profiles.yml
