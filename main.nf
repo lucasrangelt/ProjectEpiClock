@@ -45,3 +45,14 @@ process LOAD_POSTGRES {
     python3 $projectDir/src/03_load_postgres.py ${epigenetic_results_csv}
     """
 }
+
+workflow {
+    // Generate Parquet file from Synthea CSV and Horvath1 CSV
+    parquet_ch = GENERATE_PARQUET(FILE(params.synthea_csv), FILE(params.horvarth1_csv))
+
+    // Calculate Epigenetic Clock using the generated Parquet file
+    results_ch = CALCULATE_CLOCK(FILE(params.synthea_csv), parquet_ch.cpg_matrix_parquet, FILE(params.horvarth1_csv))
+
+    // Load results into PostgreSQL
+    LOAD_POSTGRES(results_ch.epigenetic_results_csv)
+}
