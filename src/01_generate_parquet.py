@@ -33,7 +33,6 @@ matrix[353:, :] = np.random.uniform(0.0, 1.0, size=(len(filler_cpg_ids), len(pat
 df_cpg = pd.DataFrame(matrix, columns=patient_ids)
 df_cpg.insert(0, "cpg_id", all_cpgs)
 
-df_cpg.to_parquet("./src/cpg_matrix.parquet", engine="pyarrow", compression="snappy")
-print(matrix)
+df_cpg.to_parquet("output_source.parquet", engine="pyarrow", compression="snappy")
 # print(df_patients.head())
 # print(df_horvath.head())
