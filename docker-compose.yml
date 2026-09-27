@@ -12,12 +12,12 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
   
-  synthea_generator:
-    build:
-      context: .
-      dockerfile: Dockerfile.synthea
-    volumes:
-      - ./data:/output
+  # synthea_generator:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.synthea
+  #   volumes:
+  #     - ./data:/output
 
   epiclock_app:
     build:
@@ -26,8 +26,8 @@ services:
     depends_on:
       postgres_vector:
         condition: service_started
-      synthea_generator:
-        condition: service_completed_successfully
+      # synthea_generator:
+      #   condition: service_completed_successfully
     environment:
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - ENV_USER=${ENV_USER}
