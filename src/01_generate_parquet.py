@@ -1,8 +1,12 @@
+import sys
 import duckdb
 import pandas as pd
 import numpy as np
 
-df_horvath = pd.read_csv("helper_files/Horvath1.csv")
+patients_csv = sys.argv[1]
+output_parquets = sys.argv[3]
+
+df_horvath = pd.read_csv(sys.argv[2])
 horvath_ids = df_horvath["CpGmarker"].values
 intercept = 0.696186304
 
@@ -33,6 +37,6 @@ matrix[353:, :] = np.random.uniform(0.0, 1.0, size=(len(filler_cpg_ids), len(pat
 df_cpg = pd.DataFrame(matrix, columns=patient_ids)
 df_cpg.insert(0, "cpg_id", all_cpgs)
 
-df_cpg.to_parquet("output_source.parquet", engine="pyarrow", compression="snappy")
+df_cpg.to_parquet(output_parquets, engine="pyarrow", compression="snappy")
 # print(df_patients.head())
 # print(df_horvath.head())
