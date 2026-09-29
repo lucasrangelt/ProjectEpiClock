@@ -38,5 +38,4 @@ df_cpg = pd.DataFrame(matrix, columns=patient_ids)
 df_cpg.insert(0, "cpg_id", all_cpgs)
 
 df_cpg.to_parquet(output_parquets, engine="pyarrow", compression="snappy")
-# print(df_patients.head())
-# print(df_horvath.head())
+print("Finished script 1 successfully and created parquet file")
