@@ -2,6 +2,7 @@ nextflow.enable.dsl=2
 
 params.synthea_csv = "$projectDir/data/csv/patients.csv"
 params.horvarth1_csv = "$projectDir/helper_files/Horvath1.csv"
+params.cpg_parquet = "$projectDir/helper_files/cpg_matrix.parquet" // We may or may not already have a parquet file. We'll deal with that on the workflow down there
 
 process GENERATE_PARQUET {
     tag "GENERATE_PARQUET_TAG"
@@ -47,8 +48,17 @@ process LOAD_POSTGRES {
 }
 
 workflow {
-    // Generate Parquet file from Synthea CSV and Horvath1 CSV
-    parquet_ch = GENERATE_PARQUET(FILE(params.synthea_csv), FILE(params.horvarth1_csv))
+    // Check if parquet file exists
+    def parquet_file = file(params.cpg_parquet)
+
+    if (parquet_file.exists()) {
+        log.info "Parquet file exists. Skipping process GENERATE_PARQUET..."
+        parquet_ch = Channel.fromPath(params.cpg_parquet)
+    } else {
+        log.info "Parquet file not found. Generating synthetic one..."
+        // Generate parquet file from Synthea CSV and Horvath1 CSV
+        parquet_ch = GENERATE_PARQUET(FILE(params.synthea_csv), FILE(params.horvarth1_csv))
+    }
 
     // Calculate Epigenetic Clock using the generated Parquet file
     results_ch = CALCULATE_CLOCK(FILE(params.synthea_csv), parquet_ch.cpg_matrix_parquet, FILE(params.horvarth1_csv))
