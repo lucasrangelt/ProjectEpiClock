@@ -2,6 +2,7 @@ import sys
 import os
 import pandas as pd
 import psycopg2
+from psycopg2.extras import execute_values
 
 if len(sys.argv) < 2:
     print("PROVIDE THE PATH TO THE EPIGENETIC RESULT FILE AS AN ARGUMENT")
@@ -12,12 +13,13 @@ if not os.path.exists(results_csv):
     sys.exit(1)
 
 df = pd.read_csv(results_csv)
+records = [tuple(x) for x in df[['patient_id', 'gender', 'chronological_age', 'biological_age', 'age_acceleration_delta']].to_numpy()]
 
 con = psycopg2.connect(
-    dbname=os.environ.get("POSTGRES_DB"),
-    user=os.environ.get("POSTGRES_USER"),
-    password=os.environ.get("POSTGRES_PASSWORD"),
-    host=os.environ.get("POSTGRES_HOST"),
+    dbname=os.environ.get("ENV_DATABASE"),
+    user=os.environ.get("ENV_USER"),
+    password=os.environ.get("ENV_PASSWORD"),
+    host=os.environ.get("ENV_HOST"),
     port="5433"
 )
 cursor = con.cursor()
@@ -41,7 +43,7 @@ upsert_query = """
         biological_age,
         age_acceleration_delta
     )
-    VALUES (%s, %s, %s, %s, %s)
+    VALUES %s
     ON CONFLICT (patient_id) DO UPDATE SET
         gender = EXCLUDED.gender,
         chronological_age = EXCLUDED.chronological_age,
@@ -50,14 +52,9 @@ upsert_query = """
         processed_at = CURRENT_TIMESTAMP;
 """
 
-for _, row in df.iterrows():
-    cursor.execute(upsert_query,(
-        str(row['patient_id']),
-        str(row['gender']),
-        int(row['chronological_age']),
-        float(row['biological_age']),
-        float(row['age_acceleration_delta'])
-    ))
+execute_values(cursor, upsert_query, records)
 con.commit()
 cursor.close()
 con.close()
+
+print(f"Bulk loaded {len(records)} patient records into PostgreSQL!")
