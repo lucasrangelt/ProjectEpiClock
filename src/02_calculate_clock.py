@@ -15,8 +15,8 @@ df_epigenetic_results = con.execute(f"""
     ),
     patient_ages AS (
         SELECT
-            id AS patient_id,
-            gender,
+            Id AS patient_id,
+            GENDER as gender,
             DATE_DIFF('year', CAST(BIRTHDATE AS DATE), CURRENT_DATE) AS chronological_age
         FROM
             '{patients_csv}'

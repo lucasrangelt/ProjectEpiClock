@@ -13,8 +13,8 @@ intercept = 0.696186304
 with duckdb.connect() as my_connection:
     df_patients = my_connection.execute(f"""
         SELECT
-            id AS patient_id,
-            gender,
+            Id AS patient_id,
+            GENDER AS gender,
             DATE_DIFF('year', CAST(BIRTHDATE AS DATE), CURRENT_DATE) AS chronological_age
         FROM
             '{patients_csv}'

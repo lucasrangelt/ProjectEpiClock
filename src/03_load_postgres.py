@@ -13,6 +13,7 @@ if not os.path.exists(results_csv):
     sys.exit(1)
 
 df = pd.read_csv(results_csv)
+df.columns = df.columns.str.lower()
 records = [tuple(x) for x in df[['patient_id', 'gender', 'chronological_age', 'biological_age', 'age_acceleration_delta']].to_numpy()]
 
 con = psycopg2.connect(
