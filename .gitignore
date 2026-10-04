@@ -15,5 +15,8 @@ env
 .todo
 /src/*.parquet
 /data
+/work
+.nextflow/
+.nextflow.log*
 
 dbt_project/profiles.yml

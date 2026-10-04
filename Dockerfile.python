@@ -7,14 +7,19 @@ ENV PYTHONUNBUFFERED 1
 # Sets up working directory inside of the container
 WORKDIR /app
 
-# Install dependencies
+# Install dependencies + Java JRE (required for Nextflow)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev \
     git \
     curl \
     gcc \
+    openjdk-17-jre-headless \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+RUN curl -s https://get.nextflow.io | bash && \
+    mv nextflow /usr/local/bin/ && \
+    chmod +x /usr/local/bin/nextflow
 
 # Install... well, more dependencies
 COPY requirements.txt .

@@ -4,5 +4,7 @@ Day 2: Set up docker-compose.yml.
 Day 16: Struggled with Synthea, trying to make it not run every time I rebuild on Docker.
 Day 17: Successfully solved multiple issues regarding Synthea and Docker folder/app mapping. Now, we can work.
 Day 18: Nevermind...
+Day 19-25: Finished solving Docker issues regarding Synthea. The solution was to comment out Synthea's image after the first run.
 
 Day 27: Prepared my nextflow (.nf) file in order to create a workflow of my pipeline.
+Day 28-04: Set up all of my nextflow files and added Nextflow to the Dockerfile.python.
