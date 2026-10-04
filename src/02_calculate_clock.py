@@ -10,19 +10,23 @@ intercept = 0.696186304
 con = duckdb.connect()
 df_epigenetic_results = con.execute(f"""
     WITH horvath_probes AS (
-        SELECT CpGmarker AS cpg_id, Coefficient AS weight
+        SELECT CpGmarker AS cpg_id, CoefficientTraining AS weight
         FROM '{horvath1_csv}'
     ),
     patient_ages AS (
-        SELECT patient_id, gender, chronological_age
-        FROM '{patients_csv}'
+        SELECT
+            id AS patient_id,
+            gender,
+            DATE_DIFF('year', CAST(BIRTHDATE AS DATE), CURRENT_DATE) AS chronological_age
+        FROM
+            '{patients_csv}'
     )
     SELECT
         p.patient_id,
         p.gender,
         p.chronological_age,
         ROUND(SUM(m.beta_value * h.weight) + {intercept}, 2) AS biological_age,
-        ROUDN((SUM(m.beta_value * h.weight) + {intercept}) - p.chronological_age, 2) AS age_acceleration_delta
+        ROUND((SUM(m.beta_value * h.weight) + {intercept}) - p.chronological_age, 2) AS age_acceleration_delta
     FROM (
         SELECT cpg_id, patient_id, beta_value
         FROM '{cpg_matrix_parquet}'

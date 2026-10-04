@@ -11,13 +11,13 @@ horvath_ids = df_horvath["CpGmarker"].values
 intercept = 0.696186304
 
 with duckdb.connect() as my_connection:
-    df_patients = my_connection.execute("""
+    df_patients = my_connection.execute(f"""
         SELECT
             id AS patient_id,
             gender,
             DATE_DIFF('year', CAST(BIRTHDATE AS DATE), CURRENT_DATE) AS chronological_age
         FROM
-            './data/csv/patients.csv'
+            '{patients_csv}'
     """).df()
 patient_ids = df_patients['patient_id'].values
 ages = df_patients['chronological_age'].values

@@ -11,6 +11,7 @@ process GENERATE_PARQUET {
     path patients_csv
     path horvath1_csv
 
+    output:
     path "cpg_matrix.parquet", emit: cpg_matrix_parquet
 
     script:
@@ -27,6 +28,7 @@ process CALCULATE_CLOCK {
     path cpg_matrix_parquet
     path horvath1_csv
 
+    output:
     path "epigenetic_results.csv", emit: epigenetic_results_csv
 
     script:
@@ -57,11 +59,11 @@ workflow {
     } else {
         log.info "Parquet file not found. Generating synthetic one..."
         // Generate parquet file from Synthea CSV and Horvath1 CSV
-        parquet_ch = GENERATE_PARQUET(FILE(params.synthea_csv), FILE(params.horvarth1_csv))
+        parquet_ch = GENERATE_PARQUET(file(params.synthea_csv), file(params.horvarth1_csv))
     }
 
     // Calculate Epigenetic Clock using the generated Parquet file
-    results_ch = CALCULATE_CLOCK(FILE(params.synthea_csv), parquet_ch.cpg_matrix_parquet, FILE(params.horvarth1_csv))
+    results_ch = CALCULATE_CLOCK(file(params.synthea_csv), parquet_ch.cpg_matrix_parquet, file(params.horvarth1_csv))
 
     // Load results into PostgreSQL
     LOAD_POSTGRES(results_ch.epigenetic_results_csv)
