@@ -3,6 +3,7 @@ import os
 import pandas as pd
 import psycopg2
 from psycopg2.extras import execute_values
+from dotenv import load_dotenv
 
 if len(sys.argv) < 2:
     print("PROVIDE THE PATH TO THE EPIGENETIC RESULT FILE AS AN ARGUMENT")
@@ -11,6 +12,8 @@ results_csv = sys.argv[1]
 if not os.path.exists(results_csv):
     print("results_csv not found")
     sys.exit(1)
+
+load_dotenv()
 
 df = pd.read_csv(results_csv)
 df.columns = df.columns.str.lower()
@@ -21,7 +24,7 @@ con = psycopg2.connect(
     user=os.environ.get("ENV_USER"),
     password=os.environ.get("ENV_PASSWORD"),
     host=os.environ.get("ENV_HOST"),
-    port="5433"
+    port=5432
 )
 cursor = con.cursor()
 
@@ -37,7 +40,7 @@ cursor.execute("""
 """)
 
 upsert_query = """
-    INSERT INTO petient_epigenetic_metrics (
+    INSERT INTO patient_epigenetic_metrics (
         patient_id,
         gender,
         chronological_age,
